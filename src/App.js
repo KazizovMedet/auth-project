@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect} from 'react';
+import { Router, Redirect, Route} from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
+import PrivateRoute from "./components/PrivateRoute";
+import {history} from "./lib/history";
+import {useDispatch, useSelector} from "react-redux";
+// import {authenticate} from "./redux/userAction";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const token = useSelector(s => s.token)
+    const dispatch = useDispatch()
+    // useEffect(() => {
+    //    if (token){
+    //        dispatch(authenticate())
+    //    }
+    // },[dispatch, token])
+    return (
+        <Router history={history}>
+            <Redirect to='/login'>{'/'}</Redirect>
+            <Route exact path='/login'><LoginPage/></Route>
+            <PrivateRoute exact path='/home' component={HomePage}/>
+        </Router>
+    );
+};
 
 export default App;
